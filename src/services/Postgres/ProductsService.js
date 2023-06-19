@@ -4,9 +4,10 @@ const InvariantError = require('../../Error/InvariantError');
 const NotFoundError = require('../../Error/NotFoundError');
 
 class ProductsService {
-  constructor(firebaseService) {
+  constructor(firebaseService, cacheService) {
     this.pool = new Pool();
     this.firebaseService = firebaseService;
+    this.cacheService = cacheService;
   }
 
   async uploadProductImageInFirebase(payload) {
@@ -26,7 +27,7 @@ class ProductsService {
       values: [productName],
     });
     if (result.rows.length) {
-      throw new InvariantError('Product name sudah ada. Gunakan nama lain');
+      throw new InvariantError('Nama product sudah ada. Gunakan nama lain');
     }
   }
 
@@ -41,15 +42,22 @@ class ProductsService {
     if (!result.rows.length) {
       throw new InvariantError('Product gagal ditambahkan');
     }
+    await this.cacheService.delete('allProduct');
+
     return result.rows[0].id;
   }
 
   async getProducts() {
-    const result = await this.pool.query({
-      text: 'SELECT * FROM products',
-    });
-
-    return result.rows;
+    try {
+      const result = await this.cacheService.get('allProduct');
+      return { result: JSON.parse(result), cache: true };
+    } catch (error) {
+      const result = await this.pool.query({
+        text: 'SELECT * FROM products',
+      });
+      await this.cacheService.set('allProduct', JSON.stringify(result.rows));
+      return { result: result.rows, cache: false };
+    }
   }
 
   async getProduct(id) {
@@ -103,7 +111,7 @@ class ProductsService {
       throw new InvariantError('Product gagal dihapus');
     }
     const newName = rows.name.split(' ').join('_');
-
+    await this.cacheService.delete('allProduct');
     await this.firebaseService.deleteImage(newName);
   }
 }

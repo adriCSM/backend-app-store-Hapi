@@ -8,6 +8,12 @@ const users = require('./api/User');
 const UsersService = require('./services/Postgres/UsersService');
 const UserValidator = require('./validators/User');
 
+// AUTHENTICATION
+const authentication = require('./api/Authentication');
+const AuthenticationService = require('./services/Postgres/AuthenticationsService');
+const AuthenticationValidator = require('./validators/Authentication');
+const TokenManager = require('./token/TokenManager');
+
 // PRODUCT
 const products = require('./api/Product');
 const ProductsService = require('./services/Postgres/ProductsService');
@@ -19,11 +25,8 @@ const carts = require('./api/cart');
 const CartsService = require('./services/Postgres/CartsService');
 const CartValidator = require('./validators/Cart');
 
-// AUTHENTICATION
-const authentication = require('./api/Authentication');
-const AuthenticationService = require('./services/Postgres/AuthenticationsService');
-const AuthenticationValidator = require('./validators/Authentication');
-const TokenManager = require('./token/TokenManager');
+// CACHE SERVER-SIDE (REDIS)
+const CacheService = require('./services/redis/CacheService');
 
 // ERROR HANDLING
 const errorHandling = require('./Error/errorHandling');
@@ -32,7 +35,8 @@ const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationService();
   const firebaseService = new FirebaseService();
-  const productsService = new ProductsService(firebaseService);
+  const cacheService = new CacheService();
+  const productsService = new ProductsService(firebaseService, cacheService);
   const cartsService = new CartsService();
 
   const server = Hapi.server({
@@ -40,7 +44,7 @@ const init = async () => {
     port: process.env.PORT,
     routes: {
       cors: {
-        origin: ['*'],
+        origin: ['http://localhost:8080/'],
       },
     },
   });

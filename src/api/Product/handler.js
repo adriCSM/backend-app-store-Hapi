@@ -28,15 +28,16 @@ class ProductHandler {
 
   async getAllProductHandler(request, h) {
     const products = await this.productService.getProducts();
+
     const response = h
       .response({
         status: 'success',
         data: {
-          products,
+          products: products.result,
         },
       })
       .code(200);
-    return response;
+    return products.cache ? response.header('X-Data-Source', 'cache') : response;
   }
 
   async getProductHandler(request, h) {
