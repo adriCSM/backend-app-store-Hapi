@@ -10,7 +10,6 @@ class AuthenticationHandler {
     this.validator.validatePostAuthenticationPayload(request.payload);
     const { username, password } = request.payload;
     const id = await this.usersService.verifyUserCredential(username, password);
-
     const refreshToken = this.tokenManager.generateRefreshToken({ id });
     const accessToken = this.tokenManager.generateAccessToken({ id });
     await this.authenticationsService.addRefreshToken(id, refreshToken);
@@ -29,8 +28,8 @@ class AuthenticationHandler {
   async putAuthenticationHandler(request, h) {
     this.validator.validatePutAuthenticationPayload(request.payload);
     const { refreshToken } = request.payload;
-    const { id: userId } = request.auth.credentials;
-    await this.authenticationsService.verifyRefreshToken(userId, refreshToken);
+
+    await this.authenticationsService.verifyRefreshToken(refreshToken);
     const { id } = this.tokenManager.verifyRefreshTokenSignature(refreshToken);
     const accessToken = this.tokenManager.generateAccessToken({ id });
     const response = h
@@ -47,9 +46,8 @@ class AuthenticationHandler {
   async deleteAuthenticationHandler(request, h) {
     this.validator.validateDeleteAuthenticationPayload(request.payload);
     const { refreshToken } = request.payload;
-    const { id } = request.auth.credentials;
-    await this.authenticationsService.verifyRefreshToken(id, refreshToken);
-    await this.authenticationsService.deleteRefreshToken(id, refreshToken);
+    await this.authenticationsService.verifyRefreshToken(refreshToken);
+    await this.authenticationsService.deleteRefreshToken(refreshToken);
     const response = h
       .response({
         status: 'success',

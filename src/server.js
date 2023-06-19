@@ -1,11 +1,23 @@
 const Hapi = require('@hapi/hapi');
 require('dotenv').config();
 const Jwt = require('@hapi/jwt');
+const Inert = require('@hapi/inert');
 
 // USER
 const users = require('./api/User');
 const UsersService = require('./services/Postgres/UsersService');
 const UserValidator = require('./validators/User');
+
+// PRODUCT
+const products = require('./api/Product');
+const ProductsService = require('./services/Postgres/ProductsService');
+const ProductValidator = require('./validators/Product');
+const FirebaseService = require('./services/firebase/FirebaseService');
+
+// CART
+const carts = require('./api/cart');
+const CartsService = require('./services/Postgres/CartsService');
+const CartValidator = require('./validators/Cart');
 
 // AUTHENTICATION
 const authentication = require('./api/Authentication');
@@ -19,6 +31,9 @@ const errorHandling = require('./Error/errorHandling');
 const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationService();
+  const firebaseService = new FirebaseService();
+  const productsService = new ProductsService(firebaseService);
+  const cartsService = new CartsService();
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -34,23 +49,10 @@ const init = async () => {
     {
       plugin: Jwt,
     },
-  ]);
-
-  server.auth.strategy('refresh_acces_token', 'jwt', {
-    keys: process.env.REFRESH_TOKEN_KEY,
-    verify: {
-      aud: false,
-      iss: false,
-      sub: false,
-      maxAgeSec: process.env.REFRESH_TOKEN_AGE,
+    {
+      plugin: Inert,
     },
-    validate: (artifacts) => ({
-      isValid: true,
-      credentials: {
-        id: artifacts.decoded.payload.id,
-      },
-    }),
-  });
+  ]);
 
   server.auth.strategy('store_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
@@ -83,6 +85,21 @@ const init = async () => {
         usersService,
         TokenManager,
         validator: AuthenticationValidator,
+      },
+    },
+    {
+      plugin: products,
+      options: {
+        productsService,
+        usersService,
+        validator: ProductValidator,
+      },
+    },
+    {
+      plugin: carts,
+      options: {
+        cartsService,
+        validator: CartValidator,
       },
     },
   ]);

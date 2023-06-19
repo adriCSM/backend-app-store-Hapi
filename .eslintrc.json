@@ -9,7 +9,11 @@
     "ecmaVersion": "latest"
   },
   "rules": {
+    "no-underscore-dangle": "off",
     "object-curly-newline": "off",
-    "import/no-extraneous-dependencies": ["off", { "devDependencies": false, "optionalDependencies": false, "peerDependencies": false }]
+    "import/no-extraneous-dependencies": [
+      "off",
+      { "devDependencies": false, "optionalDependencies": false, "peerDependencies": false }
+    ]
   }
 }

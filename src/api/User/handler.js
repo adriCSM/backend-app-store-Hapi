@@ -4,6 +4,16 @@ class UserHandler {
     this.validator = validator;
   }
 
+  async postAdminHandler(request, h) {
+    await this.usersService.addAdmin();
+    return h
+      .response({
+        status: 'success',
+        message: 'API store can be used',
+      })
+      .code(200);
+  }
+
   async postUserHandler(request, h) {
     this.validator.validateUserPayload(request.payload);
     const userId = await this.usersService.addUser(request.payload);

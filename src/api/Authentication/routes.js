@@ -8,17 +8,11 @@ const routes = (handler) => [
     method: 'PUT',
     path: '/auth',
     handler: (request, h) => handler.putAuthenticationHandler(request, h),
-    options: {
-      auth: 'refresh_acces_token',
-    },
   },
   {
     method: 'DELETE',
     path: '/auth',
     handler: (request, h) => handler.deleteAuthenticationHandler(request, h),
-    options: {
-      auth: 'store_jwt',
-    },
   },
 ];
 

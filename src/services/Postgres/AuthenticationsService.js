@@ -27,10 +27,10 @@ class AuthenticationsService {
     });
   }
 
-  async verifyRefreshToken(userId, refreshToken) {
+  async verifyRefreshToken(refreshToken) {
     const result = await this.pool.query({
-      text: 'SELECT * FROM authentications WHERE user_id=$1 AND token=$2 ',
-      values: [userId, refreshToken],
+      text: 'SELECT * FROM authentications WHERE token=$1 ',
+      values: [refreshToken],
     });
 
     if (!result.rows.length) {
@@ -40,8 +40,8 @@ class AuthenticationsService {
 
   async deleteRefreshToken(userId, refreshToken) {
     await this.pool.query({
-      text: 'DELETE FROM authentications WHERE user_id=$1 AND token=$2',
-      values: [userId, refreshToken],
+      text: 'DELETE FROM authentications WHERE token=$1',
+      values: [refreshToken],
     });
   }
 }

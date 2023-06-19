@@ -21,6 +21,11 @@ exports.up = (pgm) => {
       type: 'VARCHAR(100)',
       notNull: true,
     },
+    role: {
+      type: 'VARCHAR(100)',
+      default: 'user',
+    },
+
     created_at: {
       type: 'TIMESTAMP',
       notNull: true,
