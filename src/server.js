@@ -45,6 +45,9 @@ const init = async () => {
     routes: {
       cors: {
         origin: ['http://localhost:8080'],
+        credentials: true,
+        headers: ['Accept', 'Content-Type'],
+        additionalHeaders: ['X-Requested-With', 'X-Data-Source'],
       },
     },
   });
