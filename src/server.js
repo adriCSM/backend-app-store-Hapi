@@ -44,7 +44,7 @@ const init = async () => {
     port: process.env.PORT,
     routes: {
       cors: {
-        origin: ['http://localhost:8080/'],
+        origin: ['http://localhost:8080'],
       },
     },
   });
