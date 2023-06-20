@@ -32,10 +32,10 @@ const CacheService = require('./services/redis/CacheService');
 const errorHandling = require('./Error/errorHandling');
 
 const init = async () => {
+  const cacheService = new CacheService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationService();
   const firebaseService = new FirebaseService();
-  const cacheService = new CacheService();
   const productsService = new ProductsService(firebaseService, cacheService);
   const cartsService = new CartsService();
 
@@ -60,6 +60,15 @@ const init = async () => {
       plugin: Inert,
     },
   ]);
+
+  server.state('data', {
+    ttl: null,
+    isSecure: true,
+    isHttpOnly: true,
+    encoding: 'base64json',
+    clearInvalid: true,
+    strictHeader: true,
+  });
 
   server.auth.strategy('store_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
@@ -112,6 +121,7 @@ const init = async () => {
   ]);
 
   server.ext('onPreResponse', errorHandling);
+
   await server.start().then(() => {
     console.log(`server running at ${server.info.uri}`);
   });

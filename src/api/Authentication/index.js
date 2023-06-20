@@ -9,6 +9,7 @@ module.exports = {
       authenticationsService,
       usersService,
       TokenManager,
+
       validator,
     );
     await server.route(routes(authenticationHandler));

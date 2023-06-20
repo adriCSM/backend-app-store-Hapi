@@ -32,13 +32,12 @@ class AuthenticationsService {
       text: 'SELECT * FROM authentications WHERE token=$1 ',
       values: [refreshToken],
     });
-
     if (!result.rows.length) {
       throw new InvariantError('Refresh token tidak valid.');
     }
   }
 
-  async deleteRefreshToken(userId, refreshToken) {
+  async deleteRefreshToken(refreshToken) {
     await this.pool.query({
       text: 'DELETE FROM authentications WHERE token=$1',
       values: [refreshToken],
