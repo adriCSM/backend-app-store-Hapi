@@ -66,8 +66,8 @@ const init = async () => {
     isSecure: true,
     isHttpOnly: true,
     encoding: 'base64json',
-    // clearInvalid: true,
-    strictHeader: false,
+    clearInvalid: true,
+    strictHeader: true,
     isSameSite: 'None',
   });
 
