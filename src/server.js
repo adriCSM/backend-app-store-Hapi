@@ -67,7 +67,7 @@ const init = async () => {
     isHttpOnly: true,
     encoding: 'base64json',
     clearInvalid: true,
-    strictHeader: true,
+    strictHeader: false,
     isSameSite: 'None',
   });
 
