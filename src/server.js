@@ -68,7 +68,7 @@ const init = async () => {
     encoding: 'base64json',
     clearInvalid: true,
     strictHeader: false,
-    isSameSite: 'None',
+    // isSameSite: 'None',
   });
 
   server.auth.strategy('store_jwt', 'jwt', {
