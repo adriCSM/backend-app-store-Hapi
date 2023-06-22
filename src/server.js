@@ -61,16 +61,6 @@ const init = async () => {
     },
   ]);
 
-  server.state('refreshToken', {
-    ttl: null,
-    isSecure: true,
-    isHttpOnly: true,
-    encoding: 'base64json',
-    clearInvalid: true,
-    strictHeader: true,
-    isSameSite: 'None',
-  });
-
   server.auth.strategy('store_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {

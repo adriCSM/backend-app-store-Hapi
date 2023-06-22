@@ -13,23 +13,21 @@ class AuthenticationHandler {
     const refreshToken = this.tokenManager.generateRefreshToken({ id });
     const accessToken = this.tokenManager.generateAccessToken({ id });
     await this.authenticationsService.addRefreshToken(id, refreshToken);
-
     const response = h
       .response({
         status: 'success',
         data: {
+          refreshToken,
           accessToken,
         },
       })
-      .code(201)
-      .state('refreshToken', refreshToken);
-
+      .code(201);
     return response;
   }
 
   async putAuthenticationHandler(request, h) {
-    this.validator.validatePutAuthenticationPayload(request.state);
-    const { refreshToken } = request.state;
+    this.validator.validatePutAuthenticationPayload(request.payload);
+    const { refreshToken } = request.payload;
     await this.authenticationsService.verifyRefreshToken(refreshToken);
     const { id } = this.tokenManager.verifyRefreshTokenSignature(refreshToken);
     const accessToken = this.tokenManager.generateAccessToken({ id });
