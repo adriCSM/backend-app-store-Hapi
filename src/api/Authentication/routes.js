@@ -3,9 +3,6 @@ const routes = (handler) => [
     method: 'POST',
     path: '/auth',
     handler: (request, h) => handler.postAuthenticationHandler(request, h),
-    options: {
-      state: { parse: true, failAction: 'error' },
-    },
   },
   {
     method: 'PUT',

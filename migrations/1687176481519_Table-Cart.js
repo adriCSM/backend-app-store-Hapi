@@ -6,9 +6,9 @@ exports.up = (pgm) => {
     product_id: {
       type: 'VARCHAR(100)',
     },
-    look: {
-      type: 'BOOLEAN',
-      default: false,
+    count: {
+      type: 'INTEGER',
+      default: 0,
     },
   });
 };

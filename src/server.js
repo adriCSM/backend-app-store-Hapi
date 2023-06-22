@@ -45,9 +45,9 @@ const init = async () => {
     routes: {
       cors: {
         origin: ['http://localhost:8080', 'https://adricsm.github.io'],
+        headers: ['Accept', 'Content-Type', 'Authorization'],
         credentials: true,
-        headers: ['Accept', 'Content-Type'],
-        additionalHeaders: ['X-Requested-With', 'X-Data-Source'],
+        additionalHeaders: ['X-Requested-With', 'X-Data-Source', '*'],
       },
     },
   });

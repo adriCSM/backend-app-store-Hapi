@@ -5,13 +5,26 @@ class CartHandler {
   }
 
   async postCartHandler(request, h) {
-    const { id: productId } = request.params;
+    const { id: productId, count } = request.payload;
     const { id: userId } = request.auth.credentials;
-    await this.cartsService.addToCart(userId, productId);
+
+    await this.cartsService.addToCart(userId, productId, count);
     return h
       .response({
         status: 'success',
         message: 'Product ditambahkan ke keranjang',
+      })
+      .code(201);
+  }
+
+  async putCountProductOnCartHandler(request, h) {
+    const { id: productId, count } = request.payload;
+    const { id: userId } = request.auth.credentials;
+    await this.cartsService.updateCount(userId, productId, count);
+    return h
+      .response({
+        status: 'success',
+        message: 'Jumlah product berhasil diperbarui',
       })
       .code(201);
   }
@@ -27,29 +40,10 @@ class CartHandler {
     });
   }
 
-  async getCountCartNotLookHandler(request, h) {
-    const { id: userId } = request.auth.credentials;
-    const count = await this.cartsService.beforeLook(userId);
-    return h.response({
-      status: 'success',
-      data: {
-        count,
-      },
-    });
-  }
-
-  async putCartHandler(request, h) {
-    const { id: userId } = request.auth.credentials;
-    await this.cartsService.lookCart(userId);
-    return h.response({
-      status: 'success',
-      message: 'Keranjang dilihat',
-    });
-  }
-
   async deleteProductInCartHandler(request, h) {
     const { id: productId } = request.params;
-    await this.cartsService.deleteProductInCart(productId);
+    const { id: userId } = request.auth.credentials;
+    await this.cartsService.deleteProductInCart(userId, productId);
     return h.response({
       status: 'success',
       message: 'Berhasil menghapus product pada keranjang',

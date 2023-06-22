@@ -54,6 +54,7 @@ class AuthenticationHandler {
         message: 'Token berhasil dihapus',
       })
       .code(200);
+    console.log('berhasil logout');
     return response;
   }
 }
