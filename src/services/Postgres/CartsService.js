@@ -6,17 +6,17 @@ class CartsService {
     this.pool = new Pool();
   }
 
-  async cekProductCartExist(productId) {
+  async cekProductCartExist(userId, productId) {
     const result = await this.pool.query({
-      text: 'SELECT * FROM carts WHERE product_id=$1',
-      values: [productId],
+      text: 'SELECT * FROM carts WHERE product_id=$1 AND user_id=$2',
+      values: [productId, userId],
     });
 
     return result.rows.length;
   }
 
   async addToCart(userId, productId, count) {
-    const rows = await this.cekProductCartExist(productId);
+    const rows = await this.cekProductCartExist(userId, productId);
     if (rows) {
       const result = await this.pool.query({
         text: 'UPDATE carts SET count=count+$3 WHERE user_id=$1 AND product_id=$2 RETURNING product_id',
