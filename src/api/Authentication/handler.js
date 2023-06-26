@@ -8,8 +8,8 @@ class AuthenticationHandler {
 
   async postAuthenticationHandler(request, h) {
     this.validator.validatePostAuthenticationPayload(request.payload);
-    const { username, password } = request.payload;
-    const id = await this.usersService.verifyUserCredential(username, password);
+    const { email, password } = request.payload;
+    const id = await this.usersService.verifyUserCredential(email, password);
     const refreshToken = this.tokenManager.generateRefreshToken({ id });
     const accessToken = this.tokenManager.generateAccessToken({ id });
     await this.authenticationsService.addRefreshToken(id, refreshToken);

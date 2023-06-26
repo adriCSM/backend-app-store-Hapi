@@ -2,6 +2,7 @@ const Hapi = require('@hapi/hapi');
 require('dotenv').config();
 const Jwt = require('@hapi/jwt');
 const Inert = require('@hapi/inert');
+const mongoose = require('mongoose');
 
 // USER
 const users = require('./api/User');
@@ -116,5 +117,14 @@ const init = async () => {
   await server.start().then(() => {
     console.log(`server running at ${server.info.uri}`);
   });
+
+  await mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => {
+      console.log('mongoDB connection successfully');
+    })
+    .catch((err) => {
+      console.log('Error: ', err.message);
+    });
 };
 init();

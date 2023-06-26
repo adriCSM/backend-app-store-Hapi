@@ -28,6 +28,17 @@ class UserHandler {
       .code(201);
     return response;
   }
+
+  async getUsersHandler(request, h) {
+    const users = await this.usersService.getUsers();
+    const response = h
+      .response({
+        status: 'success',
+        data: users,
+      })
+      .code(201);
+    return response;
+  }
 }
 
 module.exports = UserHandler;

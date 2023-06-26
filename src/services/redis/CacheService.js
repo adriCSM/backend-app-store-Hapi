@@ -10,7 +10,9 @@ class CacheService {
       console.log(`Redis client error:${error}`);
     });
 
-    this.client.connect();
+    this.client.connect().then(() => {
+      console.log('redis connection successfully');
+    });
   }
 
   async set(key, value, expiredIn = 1800) {

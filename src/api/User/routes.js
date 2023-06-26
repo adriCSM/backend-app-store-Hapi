@@ -9,6 +9,14 @@ const routes = (handler) => [
     path: '/users',
     handler: (request, h) => handler.postUserHandler(request, h),
   },
+  {
+    method: 'GET',
+    path: '/users',
+    handler: (request, h) => handler.getUsersHandler(request, h),
+    options: {
+      auth: 'store_jwt',
+    },
+  },
 ];
 
 module.exports = routes;
