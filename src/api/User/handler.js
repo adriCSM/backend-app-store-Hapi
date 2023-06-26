@@ -6,12 +6,14 @@ class UserHandler {
 
   async postAdminHandler(request, h) {
     await this.usersService.addAdmin();
-    return h
+    const response = h
       .response({
         status: 'success',
         message: 'API store can be used',
       })
       .code(200);
+
+    return response;
   }
 
   async postUserHandler(request, h) {
@@ -30,7 +32,6 @@ class UserHandler {
   }
 
   async getUsersHandler(request, h) {
-    console.log('a');
     const users = await this.usersService.getUsers();
     const response = h
       .response({

@@ -94,6 +94,12 @@ class ProductsService {
     await this.cacheService.delete('allProduct');
     await this.firebaseService.deleteImage(newName);
   }
+
+  async searchProducts(query) {
+    const result = await this.db.find({ name: { $regex: query, $options: 'i' } });
+
+    return result;
+  }
 }
 
 module.exports = ProductsService;

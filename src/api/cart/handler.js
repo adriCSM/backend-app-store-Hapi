@@ -12,7 +12,7 @@ class CartHandler {
     return h
       .response({
         status: 'success',
-        message: 'Product ditambahkan ke keranjang',
+        message: 'Product berhasil ditambahkan',
       })
       .code(201);
   }

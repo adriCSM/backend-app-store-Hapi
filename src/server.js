@@ -113,17 +113,12 @@ const init = async () => {
   ]);
 
   server.ext('onPreResponse', errorHandling);
+
+  await mongoose.connect(process.env.MONGODB_URI).catch((err) => {
+    console.log('Error: ', err.message);
+  });
   await server.start().then(() => {
     console.log(`server running at ${server.info.uri}`);
   });
-
-  await mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => {
-      console.log('mongoDB connection successfully');
-    })
-    .catch((err) => {
-      console.log('Error: ', err.message);
-    });
 };
 init();

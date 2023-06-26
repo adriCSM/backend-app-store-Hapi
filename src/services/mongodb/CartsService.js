@@ -59,6 +59,18 @@ class CartsService {
       throw new InvariantError('Gagal menghapus product pada keranjang');
     }
   }
+
+  async updateCount(userId, productId, count) {
+    const result = await this.db.findOneAndUpdate(
+      { user_id: userId, product_id: productId },
+      {
+        count,
+      },
+    );
+    if (!result) {
+      throw new InvariantError('Gagal memperbarui jumlah product pada keranjang');
+    }
+  }
 }
 
 module.exports = CartsService;

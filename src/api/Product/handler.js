@@ -53,6 +53,19 @@ class ProductHandler {
       .code(200);
   }
 
+  async serchProductsHandler(request, h) {
+    const { productName } = request.query;
+    const products = await this.productService.searchProducts(productName);
+    return h
+      .response({
+        status: 'success',
+        data: {
+          products,
+        },
+      })
+      .code(200);
+  }
+
   async putProductHandler(request, h) {
     const { id: userId } = request.auth.credentials;
     await this.usersService.verifyAdmin(userId);
