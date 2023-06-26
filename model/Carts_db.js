@@ -4,18 +4,18 @@ const Cart = mongoose.model(
   'Cart',
   new mongoose.Schema({
     user_id: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
     },
     product_id: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
       require: true,
     },
     count: {
       type: Number,
       require: true,
+      default: 1,
     },
   }),
 );

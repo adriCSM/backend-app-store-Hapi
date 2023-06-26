@@ -6,24 +6,24 @@ const mongoose = require('mongoose');
 
 // USER
 const users = require('./api/User');
-const UsersService = require('./services/Postgres/UsersService');
+const UsersService = require('./services/mongodb/UsersService');
 const UserValidator = require('./validators/User');
 
 // AUTHENTICATION
 const authentication = require('./api/Authentication');
-const AuthenticationService = require('./services/Postgres/AuthenticationsService');
+const AuthenticationService = require('./services/mongodb/AuthenticationsService');
 const AuthenticationValidator = require('./validators/Authentication');
 const TokenManager = require('./token/TokenManager');
 
 // PRODUCT
 const products = require('./api/Product');
-const ProductsService = require('./services/Postgres/ProductsService');
+const ProductsService = require('./services/mongodb/ProductsService');
 const ProductValidator = require('./validators/Product');
 const FirebaseService = require('./services/firebase/FirebaseService');
 
 // CART
 const carts = require('./api/cart');
-const CartsService = require('./services/Postgres/CartsService');
+const CartsService = require('./services/mongodb/CartsService');
 const CartValidator = require('./validators/Cart');
 
 // CACHE SERVER-SIDE (REDIS)
@@ -113,7 +113,6 @@ const init = async () => {
   ]);
 
   server.ext('onPreResponse', errorHandling);
-
   await server.start().then(() => {
     console.log(`server running at ${server.info.uri}`);
   });

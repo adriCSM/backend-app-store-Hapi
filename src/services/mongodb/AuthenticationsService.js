@@ -1,46 +1,40 @@
-const { Pool } = require('pg');
+const Authentication = require('../../../model/Authentications_db');
 const InvariantError = require('../../Error/InvariantError');
 
 class AuthenticationsService {
   constructor() {
-    this.pool = new Pool();
+    this.db = Authentication;
   }
 
   async checkRefreshTokenExistAndDelete(userId) {
-    const result = await this.pool.query({
-      text: 'SELECT * FROM authentications WHERE user_id=$1 ',
-      values: [userId],
-    });
-    if (result.rows.length) {
-      await this.pool.query({
-        text: 'DELETE FROM authentications WHERE user_id=$1 ',
-        values: [userId],
+    const result = await this.db.find({ user_id: userId });
+    if (result.length) {
+      await this.db.deleteOne({
+        user_id: userId,
       });
     }
   }
 
   async addRefreshToken(userId, refreshToken) {
     await this.checkRefreshTokenExistAndDelete(userId);
-    await this.pool.query({
-      text: 'INSERT INTO authentications (user_id,token) VALUES ($1,$2) ',
-      values: [userId, refreshToken],
+    await this.db.create({
+      user_id: userId,
+      token: refreshToken,
     });
   }
 
   async verifyRefreshToken(refreshToken) {
-    const result = await this.pool.query({
-      text: 'SELECT * FROM authentications WHERE token=$1 ',
-      values: [refreshToken],
+    const result = await this.db.find({
+      token: refreshToken,
     });
-    if (!result.rows.length) {
+    if (!result.length) {
       throw new InvariantError('Refresh token tidak valid.');
     }
   }
 
   async deleteRefreshToken(refreshToken) {
-    await this.pool.query({
-      text: 'DELETE FROM authentications WHERE token=$1',
-      values: [refreshToken],
+    await this.db.deleteMany({
+      token: refreshToken,
     });
   }
 }

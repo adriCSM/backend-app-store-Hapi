@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Authentication = mongoose.model(
   'Authentication',
   new mongoose.Schema({
-    id: {
+    user_id: {
       type: String,
       ref: 'User',
       required: true,

@@ -60,10 +60,11 @@ class ProductHandler {
     const { image } = request.payload;
     this.validator.validateImageHeaders(image.hapi.headers);
     const { id } = request.params;
-    await this.productService.putProduct(id, request.payload);
+    const productId = await this.productService.putProduct(id, request.payload);
     return h.response({
       status: 'success',
       message: 'Product berhasil diperbarui',
+      productId,
     });
   }
 

@@ -30,6 +30,7 @@ class UserHandler {
   }
 
   async getUsersHandler(request, h) {
+    console.log('a');
     const users = await this.usersService.getUsers();
     const response = h
       .response({
