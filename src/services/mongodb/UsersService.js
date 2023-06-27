@@ -37,8 +37,12 @@ class UsersService {
     }
   }
 
-  async addUser({ username, phoneNumber, email, password }) {
+  async addUser({ username, phoneNumber, email, password, confirmPassword }) {
     await this.checkEmailExist(email);
+
+    if (password !== confirmPassword) {
+      throw new InvariantError('Password dan confirmPassword tidak sesuai.');
+    }
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
 
@@ -51,7 +55,7 @@ class UsersService {
     });
 
     if (!result) {
-      throw new InvariantError('Gagal menambahkan user');
+      throw new InvariantError('Gagal membuat akun');
     }
     return result.id;
   }

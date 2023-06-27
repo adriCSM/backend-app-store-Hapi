@@ -8,6 +8,7 @@ const UserPayloadSchema = Joi.object({
     .min(8)
     .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&*])/)
     .required(),
+  confirmPassword: Joi.string().required,
 });
 
 module.exports = { UserPayloadSchema };

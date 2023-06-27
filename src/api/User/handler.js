@@ -22,7 +22,7 @@ class UserHandler {
     const response = h
       .response({
         status: 'success',
-        message: 'Berhasil menambahkan user',
+        message: 'Akun berhasil dibuat',
         data: {
           userId,
         },
